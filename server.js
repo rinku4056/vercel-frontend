@@ -6,6 +6,12 @@ const path = require('path');
  const cors = require('cors');
  const nodemailer=require('nodemailer');
 app.use(cors());
+require('dotenv').config();
+app.get("/", (req, res) => {
+    res.send("Backend is running!");
+});
+
+
 app.use(cors({
   origin: 'http://127.0.0.1:5501', // Allow your front-end origin
   methods: ['GET', 'POST'], // Allow specific HTTP methods
@@ -16,7 +22,17 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
- 
+ import dotenv from 'dotenv';
+dotenv.config();
+
+// Example using the environment variables
+const dbConfig = {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+};
+
    
 
 app.get('/test', (req, res) => {
@@ -105,7 +121,6 @@ con.connect((err) => {
     throw error;
   }
  });
- app.listen(3000,()=>{
-  console.log('Backend running on http://localhost:3000/');
- });
+const PORT = process.env.PORT || 5000; 
+app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
  
