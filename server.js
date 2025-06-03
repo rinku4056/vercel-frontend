@@ -6,6 +6,8 @@ const path = require('path');
  const cors = require('cors');
  const nodemailer=require('nodemailer');
 app.use(cors());
+const dotenv = require('dotenv');
+dotenv.config();
 require('dotenv').config();
 app.get("/", (req, res) => {
     res.send("Backend is running!");
@@ -22,8 +24,8 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
- import dotenv from 'dotenv';
-dotenv.config();
+ 
+ 
 
 // Example using the environment variables
 const dbConfig = {
