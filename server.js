@@ -48,13 +48,15 @@ app.get('/test', (req, res) => {
 //   password: 'dixit', // Your MySQL password
 //   database: 'outpass'
 // } );
+ 
 
- require('dotenv').config();
 const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
+  host: 'db.gzmnviiexzvopxliaixr.supabase.co', // ← Force IPv4 host
 });
 
  
