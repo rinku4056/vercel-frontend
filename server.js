@@ -41,17 +41,24 @@ app.get('/test', (req, res) => {
   res.json({ message: 'CORS is working!' });
 });
  app.use(bodyParser.json());
-const { message } = require('statuses');
- const con=mysql.createConnection({
-  host: 'localhost',  // MySQL server host (default is 'localhost')
-  user: 'root',       // Your MySQL username (e.g., 'root')
-  password: 'dixit', // Your MySQL password
-  database: 'outpass'
-} );
+// const { message } = require('statuses');
+//  const con=mysql.createConnection({
+//   host: 'localhost',  // MySQL server host (default is 'localhost')
+//   user: 'root',       // Your MySQL username (e.g., 'root')
+//   password: 'dixit', // Your MySQL password
+//   database: 'outpass'
+// } );
+
+ require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
  
- 
-con.connect((err) => {
+con.connect(err => {
   if (err) {
     console.error('error connecting:' + err.stack);
     return;
@@ -59,27 +66,46 @@ con.connect((err) => {
   console.log('connected as id ' + con.threadId);
 });
 
- app.post('/login',(req,res)=>{
-  const{cardno,password}=req.body;
-  const query='SELECT *FROM login WHERE cardno=? AND password=?';
-  con.query(query,[cardno,password],(err,results)=>{
-    if(err){
-      console.error('database query error',err);
-      return res.status(500).json({message:'internal server error'});
-    }
-    if(results.length>0){
-      res.status(200).json({message:'login succesful'});
-    }
-    else{
-      res.status(401).json({message:'invalid cardno or password'})
-    }
-  });
- }); 
+//  app.post('/login',(req,res)=>{
+//   const{cardno,password}=req.body;
+//   const query='SELECT *FROM login WHERE cardno=? AND password=?';
+//   con.query(query,[cardno,password],(err,results)=>{
+//     if(err){
+//       console.error('database query error',err);
+//       return res.status(500).json({message:'internal server error'});
+//     }
+//     if(results.length>0){
+//       res.status(200).json({message:'login succesful'});
+//     }
+//     else{
+//       res.status(401).json({message:'invalid cardno or password'})
+//     }
+//   });
+//  }); 
 //  app.get('/response',(req,res)=>{
 //    const status=req.query;
 //    res.send('${status}');
 //    console.log('getting response');
 //  });
+app.post('/login', async (req, res) => {
+  const { cardno, password } = req.body;
+  try {
+    const result = await pool.query(
+      'SELECT * FROM login WHERE cardno = $1 AND password = $2',
+      [cardno, password]
+    );
+
+    if (result.rows.length > 0) {
+      res.send('Login successful');
+    } else {
+      res.status(401).send('Login failed');
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).send('Server error');
+  }
+});
+
  app.post('/submit',  async (req,res)=>{
       const{name,roomno,reason,timeout,timein}=req.body;
       try {
