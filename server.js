@@ -58,14 +58,14 @@ const pool = new Pool({
 });
 
  
-con.connect(err => {
+pool.connect((err, client, release) => {
   if (err) {
-    console.error('error connecting:' + err.stack);
+    console.error('❌ Error connecting to Supabase DB:', err.stack);
     return;
   }
-  console.log('connected as id ' + con.threadId);
+  console.log('✅ Connected to Supabase PostgreSQL database');
+  release(); // release the client back to the pool
 });
-
 //  app.post('/login',(req,res)=>{
 //   const{cardno,password}=req.body;
 //   const query='SELECT *FROM login WHERE cardno=? AND password=?';
