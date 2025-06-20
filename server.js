@@ -55,18 +55,17 @@ require('dotenv').config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  host: 'db.gzmnviiexzvopxliaixr.supabase.co', // ← Force IPv4 host
+  ssl: { rejectUnauthorized: false }
 });
 
  
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('❌ Error connecting to Supabase DB:', err.stack);
+    console.error('❌ Error connecting to Neon DB:', err.stack);
     return;
   }
-  console.log('✅ Connected to Supabase PostgreSQL database');
-  release(); // release the client back to the pool
+  console.log('✅ Connected to Neon PostgreSQL DB');
+  release();
 });
 //  app.post('/login',(req,res)=>{
 //   const{cardno,password}=req.body;
