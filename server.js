@@ -14,13 +14,12 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 
-app.use(
-  cors({
-    origin: "http://127.0.0.1:5501", // Allow your front-end origin
-    methods: ["GET", "POST"], // Allow specific HTTP methods
-    credentials: true, // Include cookies if needed
-  })
-);
+
+app.use(cors({
+  origin: 'https://hostel-pass.netlify.app', 
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
+  credentials: true
+}));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -134,12 +133,8 @@ app.post("/submit", async (req, res) => {
     Reason: ${reason}
     
       Please respond with "Approved" or "Rejected".
-        
-      
       Approve: ${approveLink}
-       Reject: ${rejectLink}
-  
-    
+       Reject: ${rejectLink}  
     Regards,
     Outpass System`,
     };
