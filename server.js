@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors = require('cors');
 const nodemailer = require("nodemailer");
 const API_URL =  "https://vercel-frontend-1.onrender.com";
 app.use(cors());
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 app.use(cors({
   origin: 'https://hostel-pass.netlify.app', 
   methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
-  credentials: true
+  allowedHeaders: ['Content-Type','Authorization']
 }));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
