@@ -29,6 +29,15 @@ app.use(session({
     maxAge: 1000 * 60 * 60  // 1h
   }
 }));
+app.get("/testcookie", (req, res) => {
+  res.cookie("test", "ok", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
+  res.send("Test cookie set");
+});
+
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
