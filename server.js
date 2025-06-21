@@ -19,16 +19,17 @@ app.use(bodyParser.json());
 const session = require("express-session");
 
 app.use(session({
-  secret: 'Rinku@4056',  
+  secret: 'Rinku@4056',
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    secure: true,  
-    sameSite: 'none',
-    maxAge: 1000 * 60 * 60 // 1h
+    secure: true,           // Must be true for https
+    sameSite: 'none',       // Must be 'none' for cross-site
+    maxAge: 1000 * 60 * 60  // 1h
   }
 }));
+
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header(
