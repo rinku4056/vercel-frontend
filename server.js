@@ -6,15 +6,12 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const nodemailer = require("nodemailer");
 const API_URL =  "https://vercel-frontend-1.onrender.com";
-app.use(cors());
 const dotenv = require("dotenv");
 dotenv.config();
 require("dotenv").config();
 app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
-
-
 app.use(cors({
   origin: 'https://hostel-pass.netlify.app', 
   methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
