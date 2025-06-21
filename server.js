@@ -146,7 +146,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/submit", async (req, res) => {
   const { name, roomno, reason, timeout, timein } = req.body;
-  const cardno = req.session.cardno;
+  const cardno = req.cookies.token;
   if (!cardno) {
     return res.status(401).send("Not logged in");
   }
