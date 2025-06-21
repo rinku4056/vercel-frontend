@@ -7,6 +7,9 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const API_URL =  "https://vercel-frontend-1.onrender.com";
 const dotenv = require("dotenv");
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 dotenv.config();
 require("dotenv").config();
 app.use(cors({
