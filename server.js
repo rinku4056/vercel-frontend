@@ -36,14 +36,14 @@ app.use(
     },
   })
 );
-app.get("/testcookie", (req, res) => {
-  res.cookie("test", "ok", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
-  res.json({ message: "Test cookie set" }); // JSON for clarity
-});
+// app.get("/testcookie", (req, res) => {
+//   res.cookie("test", "ok", {
+//     httpOnly: true,
+//     secure: true,
+//     sameSite: "none",
+//   });
+//   res.json({ message: "Test cookie set" }); // JSON for clarity
+// });
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -117,6 +117,26 @@ pool.connect((err, client, release) => {
 //    res.send('${status}');
 //    console.log('getting response');
 //  });
+const jwt = require("jsonwebtoken");
+function verifyToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    return res.status(401).send("Missing auth header");
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).send("Missing token");
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send("Invalid or expired token");
+    }
+    req.cardno = decoded.cardno;
+    next();
+  });
+}
 app.post("/login", async (req, res) => {
   const { cardno, password } = req.body;
   try {
@@ -126,15 +146,13 @@ app.post("/login", async (req, res) => {
     );
 
     if (result.rows.length > 0) {
-      req.session.cardno = cardno;
-      const token = cardno;
+       
+    
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
+       const token = jwt.sign({ cardno }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
       });
-      res.send("Login successful");
+      res.send("Login successful",token);
     } else {
       res.status(401).send("Login failed");
     }
@@ -144,9 +162,9 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/submit", async (req, res) => {
+app.post("/submit", verifyToken, async (req, res) => {
   const { name, roomno, reason, timeout, timein } = req.body;
-  const cardno = req.cookies.token;
+  const cardno = req.cardno;
   if (!cardno) {
     return res.status(401).send("Not logged in");
   }
