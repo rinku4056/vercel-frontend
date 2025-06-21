@@ -15,6 +15,19 @@ app.use(cors({
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true
 }));
+app.use(bodyParser.json());
+const session = require("express-session");
+
+app.use(session({
+  secret: 'Rinku@4056', // use a long random value
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    secure: true, // true if using https
+    maxAge: 1000 * 60 * 60 // 1h
+  }
+}));
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
 //   res.header(
@@ -28,18 +41,7 @@ app.get("/", (req, res) => {
 });
  
  
-const session = require("express-session");
-
-app.use(session({
-  secret: 'Rinku@4056', // use a long random value
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    secure: false, // true if using https
-    maxAge: 1000 * 60 * 60 // 1h
-  }
-}));
+ 
 
 
 // Example using the environment variables
@@ -53,7 +55,7 @@ app.use(session({
 app.get("/test", (req, res) => {
   res.json({ message: "CORS is working!" });
 });
-app.use(bodyParser.json());
+ 
 // const { message } = require('statuses');
 //  const con=mysql.createConnection({
 //   host: 'localhost',  // MySQL server host (default is 'localhost')
