@@ -3,29 +3,31 @@ const app = express();
 const path = require("path");
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const cors = require('cors');
+const cors = require("cors");
 const nodemailer = require("nodemailer");
 const API_URL =  "https://vercel-frontend-1.onrender.com";
 const dotenv = require("dotenv");
 dotenv.config();
 require("dotenv").config();
-app.get("/", (req, res) => {
-  res.send("Backend is running!");
-});
 app.use(cors({
-  origin: 'https://hostel-pass.netlify.app', 
+  origin: "https://hostel-pass.netlify.app", 
   methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true
 }));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
 });
+ 
+ 
 const session = require("express-session");
 
 app.use(session({
