@@ -19,12 +19,12 @@ app.use(bodyParser.json());
 const session = require("express-session");
 
 app.use(session({
-  secret: 'Rinku@4056', // use a long random value
+  secret: 'Rinku@4056',  
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    secure: true, // true if using https
+    secure: true,  
     sameSite: 'none',
     maxAge: 1000 * 60 * 60 // 1h
   }
@@ -39,6 +39,9 @@ app.use(session({
 // });
 app.get("/", (req, res) => {
   res.send("Backend is running!");
+});
+app.get("/test-session", (req, res) => {
+  res.json({ sessionData: req.session }); 
 });
  
  
