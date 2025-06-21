@@ -5,33 +5,37 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
-const API_URL =  "https://vercel-frontend-1.onrender.com";
+const API_URL = "https://vercel-frontend-1.onrender.com";
 const dotenv = require("dotenv");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
 dotenv.config();
 require("dotenv").config();
-app.use(cors({
-  origin: "https://hostel-pass.netlify.app", 
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'], 
-  allowedHeaders: ['Content-Type','Authorization'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://hostel-pass.netlify.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 const session = require("express-session");
 
-app.use(session({
-  secret: 'Rinku@4056',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    secure: true,           // Must be true for https
-    sameSite: 'none',       // Must be 'none' for cross-site
-    maxAge: 1000 * 60 * 60  // 1h
-  }
-}));
+app.use(
+  session({
+    secret: "Rinku@4056",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      secure: true, // Must be true for https
+      sameSite: "none", // Must be 'none' for cross-site
+      maxAge: 1000 * 60 * 60, // 1h
+    },
+  })
+);
 app.get("/testcookie", (req, res) => {
   res.cookie("test", "ok", {
     httpOnly: true,
@@ -53,12 +57,8 @@ app.get("/", (req, res) => {
   res.send("Backend is running!");
 });
 app.get("/test-session", (req, res) => {
-  res.json({ sessionData: req.session }); 
+  res.json({ sessionData: req.session });
 });
- 
- 
- 
-
 
 // Example using the environment variables
 // const dbConfig = {
@@ -71,7 +71,7 @@ app.get("/test-session", (req, res) => {
 app.get("/test", (req, res) => {
   res.json({ message: "CORS is working!" });
 });
- 
+
 // const { message } = require('statuses');
 //  const con=mysql.createConnection({
 //   host: 'localhost',  // MySQL server host (default is 'localhost')
@@ -127,6 +127,13 @@ app.post("/login", async (req, res) => {
 
     if (result.rows.length > 0) {
       req.session.cardno = cardno;
+      const token = cardno;
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      });
       res.send("Login successful");
     } else {
       res.status(401).send("Login failed");
@@ -156,8 +163,8 @@ app.post("/submit", async (req, res) => {
         pass: "zywf yxoz rxsn cxsk", // app password
       },
     });
-    const approveLink=`${API_URL}/approve?token=${token}`;
-    const rejectLink=`${API_URL}/reject?token=${token}`;
+    const approveLink = `${API_URL}/approve?token=${token}`;
+    const rejectLink = `${API_URL}/reject?token=${token}`;
     const mailOptions = {
       from: "rinkudixit193@gmail.com",
       to: "rinkudixit4056@gmail.com",
