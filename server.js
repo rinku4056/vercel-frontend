@@ -35,9 +35,8 @@ app.get("/testcookie", (req, res) => {
     secure: true,
     sameSite: "none",
   });
-  res.send("Test cookie set");
+  res.json({ message: "Test cookie set" }); // JSON for clarity
 });
-
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*");
