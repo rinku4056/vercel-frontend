@@ -27,12 +27,12 @@ app.use((req, res, next) => {
 });
 
 // Example using the environment variables
-const dbConfig = {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-};
+// const dbConfig = {
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   database: process.env.DB_NAME,
+// };
 
 app.get("/test", (req, res) => {
   res.json({ message: "CORS is working!" });
@@ -118,7 +118,7 @@ app.post("/submit", async (req, res) => {
       },
     });
     const approveLink=`${API_URL}/approve?token=${token}`;
-    const rejectLink=`${API_UR}/reject?token=${token}`;
+    const rejectLink=`${API_URL}/reject?token=${token}`;
     const mailOptions = {
       from: "rinkudixit193@gmail.com",
       to: "rinkudixit4056@gmail.com",
