@@ -152,7 +152,7 @@ app.post("/login", async (req, res) => {
        const token = jwt.sign({ cardno }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
-      res.send("Login successful",token);
+      res.json({message:"Login successful",token});
     } else {
       res.status(401).send("Login failed");
     }
